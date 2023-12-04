@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Muscle Group Selector</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="scroll-container">
+    <div class="container">
+        <div class="background-image"></div>
+
+        <h1>Select Your Workout Day</h1>
+
+        <div class="muscle-list">
+            <p onclick="getSelectedMuscleGroup('Legs')">Legs</p>
+            <p onclick="getSelectedMuscleGroup('Shoulders')">Shoulders</p>
+            <p onclick="getSelectedMuscleGroup('Biceps')">Biceps</p>
+            <p onclick="getSelectedMuscleGroup('Triceps')">Triceps</p>
+            <p onclick="getSelectedMuscleGroup('Chest')">Chest</p>
+            <p onclick="getSelectedMuscleGroup('Back')">Back</p>
+            <p onclick="getSelectedMuscleGroup('Stomach')">Stomach</p>
+        </div>
+        <div id="selectedMuscleGroup"></div>
+
+        <!-- Dummy content to make the container tall enough for scrolling -->
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        <p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        <!-- Repeat the above paragraphs as needed -->
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
