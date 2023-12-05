@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selected Exercises</title>
+    <!-- Add any necessary stylesheets or scripts here -->
+</head>
+<body>
+
+<h1>Selected Exercises</h1>
+
+<!-- Display selected muscle groups -->
+<p id="selectedMuscleGroup"></p>
+
+<ul id="selected-exercise-list">
+    <!-- Exercises will be added dynamically here -->
+</ul>
+
+<script>
+
+const muscleData = {
+    'Legs': ['Squats', 'Lunges', 'Deadlifts', 'Leg Press'],
+    'Shoulders': ['Shoulder Press', 'Front Raises', 'Lateral Raises', 'Rear Delt Flyes'],
+    'Biceps': ['Curls', 'Concentration Curls', 'Hammer Curls', 'Low Pulley Curls', 'High Pulley Curls'],
+    'Triceps': ['Tricep Dips', 'Overhead Tricep Extension', 'Tricep Kickbacks'],
+    'Chest': ['Bench Press', 'Dumbbell Flyes', 'Incline Press'],
+    'Back': ['Pull-ups', 'Barbell Rows', 'Lat Pulldowns'],
+    'Stomach': ['Planks', 'Russian Twists', 'Leg Raises']
+    // Add more muscle groups and exercises as needed
+};
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Extract the muscles from the query parameter and trim spaces
+    const urlParams = new URLSearchParams(window.location.search);
+    const selectedMusclesString = urlParams.get('muscles');
+
+    if (selectedMusclesString) {
+        const selectedMuscles = selectedMusclesString.split(',').map(muscle => muscle.trim());
+
+        if (selectedMuscles.length > 0) {
+            // Display selected muscle groups
+            const selectedMuscleGroupElement = document.getElementById('selectedMuscleGroup');
+            selectedMuscleGroupElement.textContent = `Selected Muscle Groups: ${selectedMuscles.join(', ')}`;
+
+            // Dynamically generate exercises based on selected muscles
+            const selectedExerciseList = document.getElementById('selected-exercise-list');
+            selectedExerciseList.innerHTML = '';
+
+            selectedMuscles.forEach(muscle => {
+                const exercises = muscleData[muscle];
+                console.log(`Muscle: ${muscle}, Exercises: ${JSON.stringify(exercises)}`); // Debugging line
+                if (exercises) {
+                    exercises.forEach(exercise => {
+                        const listItem = document.createElement('li');
+                        listItem.textContent = exercise;
+                        selectedExerciseList.appendChild(listItem);
+                    });
+                }
+            });
+        } else {
+            alert('No muscle groups selected. Please go back and select at least one muscle group.');
+        }
+    } else {
+        alert('No muscle groups selected. Please go back and select at least one muscle group.');
+    }
+});
+</script>
+
+</body>
+</html>
