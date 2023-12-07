@@ -1,71 +1,271 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Selected Exercises</title>
-    <!-- Add any necessary stylesheets or scripts here -->
+    <title>Training Plan</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background: linear-gradient(to right, #d3d3d3, #b0b0b0);
+            margin: 0;
+            padding: 0;
+            font-family: 'Raleway', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-y: auto;
+        }
+
+        h1 {
+            font-weight: bold;
+            color: white;
+        }
+
+        h2,
+        h3 {
+            font-weight: bold;
+            color: black;
+        }
+
+        #selectedMuscleGroup {
+            margin: 10px;
+            font-size: 18px;
+            color: white;
+        }
+
+        #exercise-container {
+            display: flex;
+            justify-content: space-between;
+            width: 80%;
+            margin-top: 20px;
+        }
+
+        #selected-exercise-list {
+            width: 45%;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            color: black;
+            margin-bottom: 20px;
+        }
+
+        #muscle-list {
+            width: 45%;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            color: black;
+            margin-bottom: 20px;
+        }
+
+        .container-header {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        li {
+            color: black;
+            cursor: pointer;
+            margin-bottom: 5px;
+        }
+
+        .selected-exercise {
+            font-weight: bold;
+        }
+
+        .muscle-item::before {
+            content: '';
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            background-image: url('https://png.pngtree.com/element_our/20200702/ourmid/pngtree-green-checkmark-error-image_2284668.jpg'); /* Add the path to your checkmark image */
+            background-size: cover;
+            margin-right: 8px;
+            visibility: hidden;
+        }
+
+        .muscle-item.selected-muscle::before {
+            visibility: visible;
+        }
+
+        .muscle-item {
+            pointer-events: none; /* Disable click events on muscle items */
+        }
+    </style>
 </head>
+
 <body>
 
-<h1>Selected Exercises</h1>
+    <h1>Training Plan</h1>
 
-<!-- Display selected muscle groups -->
-<p id="selectedMuscleGroup"></p>
+    <!-- Display selected muscle groups -->
+    <p id="selectedMuscleGroup"></p>
 
-<ul id="selected-exercise-list">
-    <!-- Exercises will be added dynamically here -->
-</ul>
+    <div id="exercise-container">
 
-<script>
+        <div id="selected-exercise-list">
+            <h2 class="container-header">Selected Exercises</h2>
+            <!-- Selected Exercises will be added dynamically here -->
+        </div>
 
-const muscleData = {
-    'Legs': ['Squats', 'Lunges', 'Deadlifts', 'Leg Press'],
-    'Shoulders': ['Shoulder Press', 'Front Raises', 'Lateral Raises', 'Rear Delt Flyes'],
-    'Biceps': ['Curls', 'Concentration Curls', 'Hammer Curls', 'Low Pulley Curls', 'High Pulley Curls'],
-    'Triceps': ['Tricep Dips', 'Overhead Tricep Extension', 'Tricep Kickbacks'],
-    'Chest': ['Bench Press', 'Dumbbell Flyes', 'Incline Press'],
-    'Back': ['Pull-ups', 'Barbell Rows', 'Lat Pulldowns'],
-    'Stomach': ['Planks', 'Russian Twists', 'Leg Raises']
-    // Add more muscle groups and exercises as needed
-};
+        <div id="muscle-list">
+            <h2 class="container-header">Muscle Groups</h2>
+            <!-- Muscle Groups will be added dynamically here -->
+        </div>
 
-document.addEventListener('DOMContentLoaded', function () {
-    // Extract the muscles from the query parameter and trim spaces
-    const urlParams = new URLSearchParams(window.location.search);
-    const selectedMusclesString = urlParams.get('muscles');
+    </div>
 
-    if (selectedMusclesString) {
-        const selectedMuscles = selectedMusclesString.split(',').map(muscle => muscle.trim());
+    <script>
+        const muscleData = {
+            'Legs': ['Squats', 'Lunges', 'Deadlifts', 'Leg Press'],
+            'Shoulders': ['Shoulder Press', 'Front Raises', 'Lateral Raises', 'Rear Delt Flyes'],
+            'Biceps': ['Curls', 'Concentration Curls', 'Hammer Curls', 'Low Pulley Curls', 'High Pulley Curls'],
+            'Triceps': ['Tricep Dips', 'Overhead Tricep Extension', 'Tricep Kickbacks'],
+            'Chest': ['Bench Press', 'Dumbbell Flyes', 'Incline Press'],
+            'Back': ['Pull-ups', 'Barbell Rows', 'Lat Pulldowns', 'Deadlifts'],
+            'Stomach': ['Planks', 'Russian Twists', 'Leg Raises']
+            // Add more muscle groups and exercises as needed
+        };
 
-        if (selectedMuscles.length > 0) {
-            // Display selected muscle groups
-            const selectedMuscleGroupElement = document.getElementById('selectedMuscleGroup');
-            selectedMuscleGroupElement.textContent = `Selected Muscle Groups: ${selectedMuscles.join(', ')}`;
+        const muscleGroupsData = {
+            'Shoulders': ['Front Delts', 'Rear Delts', 'Lateral Delts'],
+            'Biceps': ['Long Head', 'Short Head', 'Brachialis'],
+            'Triceps': ['Long Head', 'Medial Head', 'Lateral Head'],
+            'Chest': ['Upper Chest', 'Lower Chest', 'Mid Chest'],
+            'Back': ['Lats', 'Rhomboids', 'Lower Back'],
+            'Legs': ['Quadriceps', 'Hamstrings', 'Calves', 'Glutes', 'Adductors', 'Abductors'],
+            'Stomach': ['Planks', 'Russian Twists', 'Abs']
+            // Add more muscle groups and muscles as needed
+        };
 
-            // Dynamically generate exercises based on selected muscles
-            const selectedExerciseList = document.getElementById('selected-exercise-list');
-            selectedExerciseList.innerHTML = '';
+        const exerciseMusclesMap = {
+            'Squats': ['Quadriceps', 'Hamstrings', 'Calves', 'Glutes'],
+            'Lunges': ['Quadriceps', 'Hamstrings', 'Calves', 'Glutes'],
+            'Deadlifts': ['Lower Back', 'Lats', 'Hamstrings', 'Glutes'],
+            'Leg Press': ['Quadriceps', 'Hamstrings', 'Calves', 'Glutes'],
+            'Shoulder Press': ['Front Delts', 'Lateral Delts'],
+            'Front Raises': ['Front Delts'],
+            'Lateral Raises': ['Shoulders'],
+            'Rear Delt Flyes': ['Rear Delts'],
+            'Curls': ['Brachialis'],
+            'Concentration Curls': ['Brachialis'],
+            'Hammer Curls': ['Brachialis'],
+            'Low Pulley Curls': ['Long Head'],
+            'High Pulley Curls': ['Brachialis'],
+            'Tricep Dips': ['Long Head'],
+            'Overhead Tricep Extension': ['Long Head'],
+            'Tricep Kickbacks': ['Long Head'],
+            'Bench Press': ['Upper Chest', 'Lower Chest', 'Mid Chest'],
+            'Dumbbell Flyes': ['Upper Chest', 'Lower Chest', 'Mid Chest'],
+            'Incline Press': ['Upper Chest'],
+            'Pull-ups': ['Lats'],
+            'Barbell Rows': ['Lats', 'Rhomboids'],
+            'Lat Pulldowns': ['Lats', 'Rhomboids'],
+            'Planks': ['Abs'],
+            'Russian Twists': ['Abs'],
+            'Leg Raises': ['Abs']
+            // Add more exercises and muscles as needed
+        };
 
-            selectedMuscles.forEach(muscle => {
-                const exercises = muscleData[muscle];
-                console.log(`Muscle: ${muscle}, Exercises: ${JSON.stringify(exercises)}`); // Debugging line
-                if (exercises) {
-                    exercises.forEach(exercise => {
-                        const listItem = document.createElement('li');
-                        listItem.textContent = exercise;
-                        selectedExerciseList.appendChild(listItem);
+        document.addEventListener('DOMContentLoaded', function () {
+            // Extract the muscles from the query parameter and trim spaces
+            const urlParams = new URLSearchParams(window.location.search);
+            const selectedMusclesString = urlParams.get('muscles');
+
+            if (selectedMusclesString) {
+                const selectedMuscles = selectedMusclesString.split(',').map(muscle => muscle.trim());
+
+                if (selectedMuscles.length > 0) {
+                    // Display selected muscle groups
+                    const selectedMuscleGroupElement = document.getElementById('selectedMuscleGroup');
+                    selectedMuscleGroupElement.textContent = `Selected Muscle Groups: ${selectedMuscles.join(', ')}`;
+
+                    // Dynamically generate exercises and muscles based on selected muscles
+                    const selectedExerciseList = document.getElementById('selected-exercise-list');
+                    selectedExerciseList.innerHTML = '';
+
+                    const muscleList = document.getElementById('muscle-list');
+                    muscleList.innerHTML = '';
+
+                    selectedMuscles.forEach(muscle => {
+                        const exercises = muscleData[muscle];
+                        console.log(`Muscle: ${muscle}, Exercises: ${JSON.stringify(exercises)}`); // Debugging line
+                        if (exercises) {
+                            // Add exercises to the left container
+                            const exerciseHeader = document.createElement('h3');
+                            exerciseHeader.textContent = `${muscle} Exercises`;
+                            selectedExerciseList.appendChild(exerciseHeader);
+
+                            exercises.forEach(exercise => {
+                                const listItem = document.createElement('li');
+                                listItem.textContent = exercise;
+                                listItem.classList.add('exercise-item');
+                                listItem.addEventListener('click', () => toggleStyle(listItem));
+                                selectedExerciseList.appendChild(listItem);
+                            });
+
+                            // Add muscles to the right container
+                            const muscleGroupHeader = document.createElement('h3');
+                            muscleGroupHeader.textContent = `${muscle} Muscle Groups`;
+                            muscleList.appendChild(muscleGroupHeader);
+
+                            const muscles = muscleGroupsData[muscle];
+                            if (muscles) {
+                                muscles.forEach(muscleItem => {
+                                    const listItem = document.createElement('li');
+                                    listItem.textContent = muscleItem;
+                                    listItem.classList.add('muscle-item');
+                                    muscleList.appendChild(listItem);
+                                });
+                            }
+                        }
                     });
+                } else {
+                    alert('No muscle groups selected. Please go back and select at least one muscle group.');
                 }
-            });
-        } else {
-            alert('No muscle groups selected. Please go back and select at least one muscle group.');
+            } else {
+                alert('No muscle groups selected. Please go back and select at least one muscle group.');
+            }
+        });
+
+        function toggleStyle(item) {
+            item.classList.toggle('selected-exercise');
+            updateCheckmarks();
         }
-    } else {
-        alert('No muscle groups selected. Please go back and select at least one muscle group.');
-    }
-});
-</script>
+
+        function updateCheckmarks() {
+            const exerciseItems = document.querySelectorAll('.exercise-item');
+            const muscleItems = document.querySelectorAll('.muscle-item');
+
+            exerciseItems.forEach(exerciseItem => {
+                const exerciseName = exerciseItem.textContent.trim();
+                const isSelected = exerciseItem.classList.contains('selected-exercise');
+
+                muscleItems.forEach(muscleItem => {
+                    const muscleName = muscleItem.textContent.trim();
+                    const musclesForExercise = exerciseMusclesMap[exerciseName] || [];
+
+                    if (musclesForExercise.includes(muscleName)) {
+                        if (isSelected) {
+                            muscleItem.classList.add('selected-muscle');
+                        } else {
+                            muscleItem.classList.remove('selected-muscle');
+                        }
+                    }
+                });
+            });
+        }
+    </script>
 
 </body>
+
 </html>

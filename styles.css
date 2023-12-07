@@ -68,3 +68,11 @@ button.round-button {
 button.round-button:hover {
     background-color: #b0b0b0; /* Slightly lighter color on hover */
 }
+
+/* Add this to your styles.css file */
+.selected-muscle::before {
+    content: '✔'; /* Checkmark character */
+    margin-right: 5px;
+    color: green; /* Change the color as needed */
+}
+
