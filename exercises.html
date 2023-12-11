@@ -100,12 +100,32 @@
         .muscle-item {
             pointer-events: none; /* Disable click events on muscle items */
         }
+
+        .return-button {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 14px;
+            z-index: 1;
+        }
+
+        .return-button:hover {
+            background-color: #555;
+        }
+        
     </style>
 </head>
 
 <body>
 
     <h1>Training Plan</h1>
+
+    <a href="index.html" id="returnButton" class="return-button">Return to Muscle Selector</a>
 
     <!-- Display selected muscle groups -->
     <p id="selectedMuscleGroup"></p>
@@ -126,55 +146,189 @@
 
     <script>
         const muscleData = {
-            'Legs': ['Squats', 'Lunges', 'Deadlifts', 'Leg Press'],
-            'Shoulders': ['Shoulder Press', 'Front Raises', 'Lateral Raises', 'Rear Delt Flyes'],
-            'Biceps': ['Curls', 'Concentration Curls', 'Hammer Curls', 'Low Pulley Curls', 'High Pulley Curls'],
-            'Triceps': ['Tricep Dips', 'Overhead Tricep Extension', 'Tricep Kickbacks'],
-            'Chest': ['Bench Press', 'Dumbbell Flyes', 'Incline Press'],
-            'Back': ['Pull-ups', 'Barbell Rows', 'Lat Pulldowns', 'Deadlifts'],
-            'Stomach': ['Planks', 'Russian Twists', 'Leg Raises']
+            'Legs': [
+                'Dumbbell Squats', 'Squats', 'Front Squats', 'Power Squats', 'Angled Leg Press', 'Hack Squats',
+                'Leg Extensions', 'Lying Leg Curls', 'Standing Leg Curls', 'Seated Leg Curls', 'Good Mornings',
+                'Cable Adductions', 'Machine Adductions', 'Standing Calf Raises', 'One-Leg Toe Raises',
+                'Donkey Calf Raises', 'Seated Calf Raises', 'Seated Barbell Calf Raises'
+            ],
+            'Shoulders': [
+                'Back Press', 'Front Press', 'Shoulder Press', 'Dumbbell Press', 'One-Arm Dumbbell Press',
+                'Lateral Raises', 'Bent-Over Lateral Raises', 'Front Raises', 'Side-Lying Lateral Raises',
+                'Low Pulley Lateral Raises', 'Low Pulley Front Raises', 'Low Pulley Bent-Over Lateral Raises',
+                'One-Dumbbell Front Raises', 'Barbell Front Raises', 'Upright Rows', 'Nautilus Lateral Raises',
+                'Pec Deck Rear Delt Laterals', 'Rear Delt Flyes'
+            ],
+            'Biceps': [
+                'Curls', 'Concentration Curls', 'Hammer Curls', 'Low Pulley Curls', 'High Pulley Curls',
+                'Barbell Curls', 'Machine Curls', 'Preacher Curls', 'Reverse Curls', 'Reverse Wrist Curls', 'Wrist Curls'
+            ],
+            'Triceps': [
+                'Tricep Dips', 'Overhead Tricep Extension', 'Tricep Kickbacks', 'Pushdowns', 'Reverse Pushdowns',
+                'One-Arm Reverse Pushdowns', 'Triceps Extensions', 'Dumbbell Triceps Extensions',
+                'One-Arm Dumbbell Triceps Extensions', 'Seated Dumbbell Triceps Extensions', 'Seated EZ-Bar Triceps Extensions',
+                'Triceps Kickbacks', 'Triceps Dips'
+            ],
+            'Chest': [
+                'Bench Press', 'Close-Grip Bench Press', 'Incline Press', 'Decline Press', 'Push-Ups',
+                'Parallel Bar Dips', 'Dumbbell Press', 'Dumbbell Flys', 'Incline Dumbbell Press', 'Incline Dumbbell Flys',
+                'Pec Deck Flys', 'Cable Crossover Flys', 'Dumbbell Pullovers', 'Barbell Pullovers'
+            ],
+            'Back': [
+                'Chin-Ups', 'Reverse Chin-Ups', 'Lat Pulldowns', 'Back Lat Pulldowns', 'Close-Grip Lat Pulldowns',
+                'Straight-Arm Lat Pulldowns', 'Seated Rows', 'One-Arm Dumbbell Rows', 'Bent Rows', 'T-Bar Rows',
+                'Stiff-Legged Deadlifts', 'Deadlifts', 'Sumo Deadlifts', 'Back Extension', 'Upright Rows',
+                'Barbell Shrugs', 'Dumbbell Shrugs', 'Machine Shrugs'
+            ],
+            'Abdomen': [
+                'Crunches', 'Sit-Ups', 'Gym Ladder Sit-Ups', 'Calves Over Bench Sit-Ups', 'Incline Bench Sit-Ups',
+                'Specific Bench Sit-Ups', 'High Pulley Crunches', 'Machine Crunches', 'Incline Leg Raises', 'Leg Raises',
+                'Hanging Leg Raises', 'Broomstick Twists', 'Dumbbell Side Bends', 'Roman Chair Side Bends',
+                'Machine Trunk Rotations'
+            ],
+            'Buttocks': [
+                'Lunges', 'Cable Kick Backs', 'Machine Hip Extensions (Kick Backs)', 'Floor Hip Extensions (Kick Backs)',
+                'Bridging', 'Cable Hip Abductions', 'Standing Machine Hip Abductions', 'Floor Hip Abductions',
+                'Seated Machine Hip Abductions'
+            ]
             // Add more muscle groups and exercises as needed
         };
 
+
         const muscleGroupsData = {
-            'Shoulders': ['Front Delts', 'Rear Delts', 'Lateral Delts'],
-            'Biceps': ['Long Head', 'Short Head', 'Brachialis'],
-            'Triceps': ['Long Head', 'Medial Head', 'Lateral Head'],
-            'Chest': ['Upper Chest', 'Lower Chest', 'Mid Chest'],
-            'Back': ['Lats', 'Rhomboids', 'Lower Back'],
-            'Legs': ['Quadriceps', 'Hamstrings', 'Calves', 'Glutes', 'Adductors', 'Abductors'],
-            'Stomach': ['Planks', 'Russian Twists', 'Abs']
+            'Shoulders': ['Deltoid (Anterior)', 'Deltoid (Lateral)', 'Deltoid (Posterior)', 'Trapezius'],
+            'Biceps': ['Biceps Brachii', 'Brachialis', 'Brachioradialis', 'Extensor Carpi Radialis Longus', 'Flexor Carpi Radialis', 'Flexor Carpi Ulnaris'],
+            'Triceps': ['Triceps Brachii'],
+            'Chest': ['Pectoralis Major'],
+            'Back': ['Latissimus Dorsi', 'Biceps Brachii', 'Trapezius', 'Deltoid (Posterior)'],
+            'Legs': ['Quadriceps', 'Hamstrings', 'Gastrocnemius', 'Gluteus Maximus', 'Erector Spinae', 'Adductors'],
+            'Abdomen': ['Rectus Abdominis', 'Obliques'],
+            'Buttocks': ['Rectus Abdominis', 'Obliques']
+
             // Add more muscle groups and muscles as needed
         };
 
         const exerciseMusclesMap = {
-            'Squats': ['Quadriceps', 'Hamstrings', 'Calves', 'Glutes'],
-            'Lunges': ['Quadriceps', 'Hamstrings', 'Calves', 'Glutes'],
-            'Deadlifts': ['Lower Back', 'Lats', 'Hamstrings', 'Glutes'],
-            'Leg Press': ['Quadriceps', 'Hamstrings', 'Calves', 'Glutes'],
-            'Shoulder Press': ['Front Delts', 'Lateral Delts'],
-            'Front Raises': ['Front Delts'],
-            'Lateral Raises': ['Shoulders'],
-            'Rear Delt Flyes': ['Rear Delts'],
-            'Curls': ['Brachialis'],
-            'Concentration Curls': ['Brachialis'],
-            'Hammer Curls': ['Brachialis'],
-            'Low Pulley Curls': ['Long Head'],
-            'High Pulley Curls': ['Brachialis'],
-            'Tricep Dips': ['Long Head'],
-            'Overhead Tricep Extension': ['Long Head'],
-            'Tricep Kickbacks': ['Long Head'],
-            'Bench Press': ['Upper Chest', 'Lower Chest', 'Mid Chest'],
-            'Dumbbell Flyes': ['Upper Chest', 'Lower Chest', 'Mid Chest'],
-            'Incline Press': ['Upper Chest'],
-            'Pull-ups': ['Lats'],
-            'Barbell Rows': ['Lats', 'Rhomboids'],
-            'Lat Pulldowns': ['Lats', 'Rhomboids'],
-            'Planks': ['Abs'],
-            'Russian Twists': ['Abs'],
-            'Leg Raises': ['Abs']
-            // Add more exercises and muscles as needed
+            'Dumbbell Squats': ['Quadriceps', 'Hamstrings', 'Gastrocnemius', 'Gluteus Maximus'],
+            'Squats': ['Quadriceps', 'Hamstrings', 'Gastrocnemius', 'Gluteus Maximus'],
+            'Front Squats': ['Quadriceps', 'Hamstrings', 'Gastrocnemius', 'Gluteus Maximus'],
+            'Power Squats': ['Quadriceps', 'Hamstrings', 'Gastrocnemius', 'Gluteus Maximus'],
+            'Angled Leg Press': ['Quadriceps', 'Hamstrings', 'Gastrocnemius', 'Gluteus Maximus'],
+            'Hack Squats': ['Quadriceps', 'Hamstrings', 'Gastrocnemius', 'Gluteus Maximus'],
+            'Leg Extensions': ['Quadriceps'],
+            'Lying Leg Curls': ['Hamstrings'],
+            'Standing Leg Curls': ['Hamstrings'],
+            'Seated Leg Curls': ['Hamstrings'],
+            'Good Mornings': ['Erector Spinae', 'Hamstrings'],
+            'Cable Adductions': ['Adductors'],
+            'Machine Adductions': ['Adductors'],
+            'Standing Calf Raises': ['Gastrocnemius'],
+            'One-Leg Toe Raises': ['Gastrocnemius'],
+            'Donkey Calf Raises': ['Gastrocnemius'],
+            'Seated Calf Raises': ['Gastrocnemius'],
+            'Seated Barbell Calf Raises': ['Gastrocnemius'],
+
+            'Back Press': ['Deltoid (Posterior)'],
+            'Front Press': ['Deltoid (Anterior)'],
+            'Shoulder Press': ['Deltoid (Anterior)', 'Deltoid (Lateral)', 'Deltoid (Posterior)'],
+            'Dumbbell Press': ['Deltoid (Anterior)', 'Deltoid (Lateral)', 'Deltoid (Posterior)'],
+            'One-Arm Dumbbell Press': ['Deltoid (Anterior)', 'Deltoid (Lateral)', 'Deltoid (Posterior)'],
+            'Lateral Raises': ['Deltoid (Lateral)'],
+            'Bent-Over Lateral Raises': ['Deltoid (Posterior)'],
+            'Front Raises': ['Deltoid (Anterior)'],
+            'Side-Lying Lateral Raises': ['Deltoid (Lateral)'],
+            'Low Pulley Lateral Raises': ['Deltoid (Lateral)'],
+            'Low Pulley Front Raises': ['Deltoid (Anterior)'],
+            'Low Pulley Bent-Over Lateral Raises': ['Deltoid (Posterior)'],
+            'One-Dumbbell Front Raises': ['Deltoid (Anterior)'],
+            'Barbell Front Raises': ['Deltoid (Anterior)'],
+            'Upright Rows': ['Trapezius', 'Deltoid (Lateral)'],
+            'Nautilus Lateral Raises': ['Deltoid (Lateral)'],
+            'Pec Deck Rear Delt Laterals': ['Deltoid (Posterior)', 'Trapezius'],
+
+            'Curls': ['Biceps Brachii', 'Brachialis'],
+            'Concentration Curls': ['Biceps Brachii', 'Brachialis'],
+            'Hammer Curls': ['Biceps Brachii', 'Brachialis'],
+            'Low Pulley Curls': ['Biceps Brachii', 'Brachialis'],
+            'High Pulley Curls': ['Biceps Brachii', 'Brachialis'],
+            'Barbell Curls': ['Biceps Brachii', 'Brachialis'],
+            'Machine Curls': ['Biceps Brachii', 'Brachialis'],
+            'Preacher Curls': ['Biceps Brachii', 'Brachialis'],
+            'Reverse Curls': ['Brachioradialis', 'Extensor Carpi Radialis Longus'],
+            'Reverse Wrist Curls': ['Flexor Carpi Radialis', 'Flexor Carpi Ulnaris'],
+
+            'Triceps Extensions': ['Triceps Brachii'],
+            'Dumbbell Triceps Extensions': ['Triceps Brachii'],
+            'One-Arm Dumbbell Triceps Extensions': ['Triceps Brachii'],
+            'Seated Dumbbell Triceps Extensions': ['Triceps Brachii'],
+            'Seated EZ-Bar Triceps Extensions': ['Triceps Brachii'],
+            'Triceps Kickbacks': ['Triceps Brachii'],
+            'Triceps Dips': ['Triceps Brachii', 'Pectoralis Major'],
+            'Reverse Pushdowns': ['Triceps Brachii'],
+            'One-Arm Reverse Pushdowns': ['Triceps Brachii'],
+            'Chin-Ups': ['Latissimus Dorsi', 'Biceps Brachii'],
+            'Reverse Chin-Ups': ['Latissimus Dorsi', 'Biceps Brachii'],
+            'Lat Pulldowns': ['Latissimus Dorsi', 'Biceps Brachii'],
+            'Back Lat Pulldowns': ['Latissimus Dorsi', 'Biceps Brachii'],
+            'Close-Grip Lat Pulldowns': ['Latissimus Dorsi', 'Biceps Brachii'],
+            'Straight-Arm Lat Pulldowns': ['Latissimus Dorsi'],
+            'Seated Rows': ['Latissimus Dorsi', 'Trapezius'],
+            'One-Arm Dumbbell Rows': ['Latissimus Dorsi', 'Trapezius'],
+            'Bent Rows': ['Latissimus Dorsi', 'Trapezius'],
+            'T-Bar Rows': ['Latissimus Dorsi', 'Trapezius'],
+            'Stiff-Legged Deadlifts': ['Erector Spinae', 'Hamstrings', 'Gluteus Maximus'],
+            'Deadlifts': ['Erector Spinae', 'Latissimus Dorsi', 'Hamstrings', 'Gluteus Maximus'],
+            'Sumo Deadlifts': ['Erector Spinae', 'Adductors', 'Hamstrings', 'Gluteus Maximus'],
+            'Back Extension': ['Erector Spinae'],
+            'Upright Rows': ['Trapezius', 'Deltoid (Lateral)'],
+            'Barbell Shrugs': ['Trapezius'],
+            'Dumbbell Shrugs': ['Trapezius'],
+            'Machine Shrugs': ['Trapezius'],
+
+            'Bench Press': ['Pectoralis Major', 'Triceps Brachii'],
+            'Close-Grip Bench Press': ['Pectoralis Major', 'Triceps Brachii'],
+            'Incline Press': ['Pectoralis Major', 'Triceps Brachii'],
+            'Decline Press': ['Pectoralis Major', 'Triceps Brachii'],
+            'Push-Ups': ['Pectoralis Major', 'Triceps Brachii'],
+            'Parallel Bar Dips': ['Pectoralis Major', 'Triceps Brachii'],
+            'Dumbbell Press': ['Pectoralis Major', 'Triceps Brachii'],
+            'Dumbbell Flys': ['Pectoralis Major'],
+            'Incline Dumbbell Press': ['Pectoralis Major', 'Triceps Brachii'],
+            'Incline Dumbbell Flys': ['Pectoralis Major'],
+            'Pec Deck Flys': ['Pectoralis Major'],
+            'Cable Crossover Flys': ['Pectoralis Major'],
+            'Dumbbell Pullovers': ['Pectoralis Major'],
+            'Barbell Pullovers': ['Pectoralis Major'],
+
+            'Crunches': ['Rectus Abdominis', 'Obliques'],
+            'Sit-Ups': ['Rectus Abdominis', 'Obliques'],
+            'Gym Ladder Sit-Ups': ['Rectus Abdominis', 'Obliques'],
+            'Calves Over Bench Sit-Ups': ['Rectus Abdominis', 'Obliques'],
+            'Incline Bench Sit-Ups': ['Rectus Abdominis', 'Obliques'],
+            'Specific Bench Sit-Ups': ['Rectus Abdominis', 'Obliques'],
+            'High Pulley Crunches': ['Rectus Abdominis'],
+            'Machine Crunches': ['Rectus Abdominis'],
+            'Incline Leg Raises': ['Rectus Abdominis', 'Obliques'],
+            'Leg Raises': ['Rectus Abdominis', 'Obliques'],
+            'Hanging Leg Raises': ['Rectus Abdominis', 'Obliques'],
+            'Broomstick Twists': ['Obliques'],
+            'Dumbbell Side Bends': ['Obliques'],
+            'Roman Chair Side Bends': ['Obliques'],
+            'Machine Trunk Rotations': ['Rectus Abdominis', 'Obliques'],
+
+            'Lunges': ['Gluteus Maximus', 'Quadriceps', 'Hamstrings'],
+            'Cable Kick Backs': ['Gluteus Maximus'],
+            'Machine Hip Extensions (Kick Backs)': ['Gluteus Maximus'],
+            'Floor Hip Extensions(Kick Backs)': ['Gluteus Maximus'],
+            'Bridging': ['Gluteus Maximus', 'Hamstrings'],
+            'Cable Hip Abductions': ['Gluteus Medius', 'Gluteus Maximus'],
+            'Standing Machine Hip Abductions': ['Gluteus Medius', 'Gluteus Maximus'],
+            'Floor Hip Abductions': ['Gluteus Medius', 'Gluteus Maximus'],
+            'Seated Machine Hip Abductions': ['Gluteus Medius', 'Gluteus Maximus']
         };
+
+
+
 
         document.addEventListener('DOMContentLoaded', function () {
             // Extract the muscles from the query parameter and trim spaces
@@ -246,22 +400,39 @@
             const exerciseItems = document.querySelectorAll('.exercise-item');
             const muscleItems = document.querySelectorAll('.muscle-item');
 
+            const selectedMuscles = [];
+
             exerciseItems.forEach(exerciseItem => {
                 const exerciseName = exerciseItem.textContent.trim();
                 const isSelected = exerciseItem.classList.contains('selected-exercise');
 
-                muscleItems.forEach(muscleItem => {
-                    const muscleName = muscleItem.textContent.trim();
-                    const musclesForExercise = exerciseMusclesMap[exerciseName] || [];
+                const musclesForExercise = exerciseMusclesMap[exerciseName] || [];
 
-                    if (musclesForExercise.includes(muscleName)) {
+                musclesForExercise.forEach(muscle => {
+                    const muscleItem = Array.from(muscleItems).find(item => item.textContent.trim() === muscle);
+
+                    if (muscleItem) {
                         if (isSelected) {
                             muscleItem.classList.add('selected-muscle');
                         } else {
                             muscleItem.classList.remove('selected-muscle');
                         }
+
+                        // Store the muscle for later reference
+                        if (isSelected && !selectedMuscles.includes(muscle)) {
+                            selectedMuscles.push(muscle);
+                        }
                     }
                 });
+            });
+
+            // Update checkmarks for muscles associated with other selected exercises
+            selectedMuscles.forEach(selectedMuscle => {
+                const muscleItem = Array.from(muscleItems).find(item => item.textContent.trim() === selectedMuscle);
+
+                if (muscleItem) {
+                    muscleItem.classList.add('selected-muscle');
+                }
             });
         }
     </script>
