@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Training Plan</title>
+    <link rel="stylesheet" href="styles.css">
     <style>
         body {
             background: linear-gradient(to right, #d3d3d3, #b0b0b0);
@@ -86,7 +87,7 @@
             display: inline-block;
             width: 16px;
             height: 16px;
-            background-image: url('https://png.pngtree.com/element_our/20200702/ourmid/pngtree-green-checkmark-error-image_2284668.jpg');
+            background-image: url('https://png.pngtree.com/element_our/20200702/ourmid/pngtree-green-checkmark-error-image_2284668.jpg'); /* Add the path to your checkmark image */
             background-size: cover;
             margin-right: 8px;
             visibility: hidden;
@@ -97,7 +98,7 @@
         }
 
         .muscle-item {
-            pointer-events: none;
+            pointer-events: none; /* Disable click events on muscle items */
         }
 
         .return-button {
@@ -116,24 +117,7 @@
         .return-button:hover {
             background-color: #555;
         }
-
-        /* Update the style for the search button */
-        .search-button {
-            padding: 5px 10px; /* Adjust padding for better appearance */
-            background-color: #333;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            font-size: 12px;
-            cursor: pointer;
-            margin-left: 10px; /* Adjust the margin for the desired distance from the right */
-            border: none;
-            display: inline-block; /* Make it an inline-block element */
-        }
-
-        .search-button:hover {
-            background-color: #555;
-        }
+        
     </style>
 </head>
 
@@ -162,7 +146,6 @@
 
     <script>
         const muscleData = {
-            // ... (your existing muscle data)
             'Legs': [
                 'Dumbbell Squats', 'Squats', 'Front Squats', 'Power Squats', 'Angled Leg Press', 'Hack Squats',
                 'Leg Extensions', 'Lying Leg Curls', 'Standing Leg Curls', 'Seated Leg Curls', 'Good Mornings',
@@ -207,10 +190,11 @@
                 'Bridging', 'Cable Hip Abductions', 'Standing Machine Hip Abductions', 'Floor Hip Abductions',
                 'Seated Machine Hip Abductions'
             ]
+            // Add more muscle groups and exercises as needed
         };
 
+
         const muscleGroupsData = {
-            // ... (your existing muscle groups data)
             'Shoulders': ['Deltoid (Anterior)', 'Deltoid (Lateral)', 'Deltoid (Posterior)', 'Trapezius'],
             'Biceps': ['Biceps Brachii', 'Brachialis', 'Brachioradialis', 'Extensor Carpi Radialis Longus', 'Flexor Carpi Radialis', 'Flexor Carpi Ulnaris'],
             'Triceps': ['Long Head', 'Lateral Head', 'Medial Head'],
@@ -219,10 +203,11 @@
             'Legs': ['Quadriceps', 'Hamstrings', 'Gastrocnemius', 'Gluteus Maximus', 'Erector Spinae', 'Adductors'],
             'Abdomen': ['Rectus Abdominis', 'Obliques', 'Transverse Abdominis'],
             'Buttocks': ['Gluteus Maximus', 'Gluteus Medius', 'Gluteus Minimus']
+
+            // Add more muscle groups and muscles as needed
         };
 
         const exerciseMusclesMap = {
-            // ... (your existing exercise muscles map)
             'Dumbbell Squats': ['Quadriceps', 'Hamstrings', 'Gastrocnemius', 'Gluteus Maximus'],
             'Squats': ['Quadriceps', 'Hamstrings', 'Gastrocnemius', 'Gluteus Maximus'],
             'Front Squats': ['Quadriceps', 'Hamstrings', 'Gastrocnemius', 'Gluteus Maximus'],
@@ -346,7 +331,11 @@
             'Seated Machine Hip Abductions': ['Gluteus Medius', 'Gluteus Maximus', 'Gluteus Minimus']
         };
 
+
+
+
         document.addEventListener('DOMContentLoaded', function () {
+            // Extract the muscles from the query parameter and trim spaces
             const urlParams = new URLSearchParams(window.location.search);
             const selectedMusclesString = urlParams.get('muscles');
 
@@ -354,9 +343,11 @@
                 const selectedMuscles = selectedMusclesString.split(',').map(muscle => muscle.trim());
 
                 if (selectedMuscles.length > 0) {
+                    // Display selected muscle groups
                     const selectedMuscleGroupElement = document.getElementById('selectedMuscleGroup');
                     selectedMuscleGroupElement.textContent = `Selected Muscle Groups: ${selectedMuscles.join(', ')}`;
 
+                    // Dynamically generate exercises and muscles based on selected muscles
                     const selectedExerciseList = document.getElementById('selected-exercise-list');
                     selectedExerciseList.innerHTML = '';
 
@@ -365,8 +356,9 @@
 
                     selectedMuscles.forEach(muscle => {
                         const exercises = muscleData[muscle];
-
+                        console.log(`Muscle: ${muscle}, Exercises: ${JSON.stringify(exercises)}`); // Debugging line
                         if (exercises) {
+                            // Add exercises to the left container
                             const exerciseHeader = document.createElement('h3');
                             exerciseHeader.textContent = `${muscle} Exercises`;
                             selectedExerciseList.appendChild(exerciseHeader);
@@ -375,21 +367,13 @@
                                 const listItem = document.createElement('li');
                                 listItem.textContent = exercise;
                                 listItem.classList.add('exercise-item');
-                                listItem.musclesForExercise = exerciseMusclesMap[exercise] || [];
-
-                                const searchButton = document.createElement('button');
-                                searchButton.textContent = 'Search Exersise';
-                                searchButton.classList.add('search-button');
-                                searchButton.addEventListener('click', (event) => {
-                                    event.stopPropagation();
-                                    searchExercise(exercise);
-                                });
-
-                                listItem.appendChild(searchButton);
+                                
                                 listItem.addEventListener('click', () => toggleStyle(listItem));
                                 selectedExerciseList.appendChild(listItem);
+                                
                             });
 
+                            // Add muscles to the right container
                             const muscleGroupHeader = document.createElement('h3');
                             muscleGroupHeader.textContent = `${muscle} Muscle Groups`;
                             muscleList.appendChild(muscleGroupHeader);
@@ -425,26 +409,37 @@
             const selectedMuscles = [];
 
             exerciseItems.forEach(exerciseItem => {
-                if (exerciseItem.classList.contains('selected-exercise')) {
-                    selectedMuscles.push(...exerciseItem.musclesForExercise);
-                }
+                const exerciseName = exerciseItem.textContent.trim();
+                const isSelected = exerciseItem.classList.contains('selected-exercise');
+
+                const musclesForExercise = exerciseMusclesMap[exerciseName] || [];
+
+                musclesForExercise.forEach(muscle => {
+                    const muscleItem = Array.from(muscleItems).find(item => item.textContent.trim() === muscle);
+
+                    if (muscleItem) {
+                        if (isSelected) {
+                            muscleItem.classList.add('selected-muscle');
+                        } else {
+                            muscleItem.classList.remove('selected-muscle');
+                        }
+
+                        // Store the muscle for later reference
+                        if (isSelected && !selectedMuscles.includes(muscle)) {
+                            selectedMuscles.push(muscle);
+                        }
+                    }
+                });
             });
 
-            muscleItems.forEach(muscleItem => {
-                if (selectedMuscles.includes(muscleItem.textContent)) {
+            // Update checkmarks for muscles associated with other selected exercises
+            selectedMuscles.forEach(selectedMuscle => {
+                const muscleItem = Array.from(muscleItems).find(item => item.textContent.trim() === selectedMuscle);
+
+                if (muscleItem) {
                     muscleItem.classList.add('selected-muscle');
-                } else {
-                    muscleItem.classList.remove('selected-muscle');
                 }
             });
-        }
-
-        function searchExercise(exercise) {
-            // Implement your search functionality here
-            const searchQuery = `${exercise}`;
-            const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(searchQuery)}`;
-            window.location.href = searchUrl;
-            //alert(`Searching for exercise: ${exercise}`);
         }
     </script>
 
