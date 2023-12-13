@@ -22,35 +22,29 @@
         h1 {
             font-weight: bold;
             color: white;
-            font-size: 24px;
         }
 
         h2,
         h3 {
             font-weight: bold;
             color: black;
-            font-size: 18px;
         }
 
         #selectedMuscleGroup {
             margin: 10px;
-            font-size: 16px;
+            font-size: 18px;
             color: white;
         }
 
         #exercise-container {
             display: flex;
             justify-content: space-between;
-            width: 100%;
+            width: 80%;
             margin-top: 20px;
-            max-width: 1200px; /* Set a max-width for better readability */
-            margin: 20px 10px; /* Add margin to the top and bottom */
-        
         }
 
-        #selected-exercise-list,
-        #muscle-list {
-            flex: 1; /* Make containers take equal space */
+        #selected-exercise-list {
+            width: 45%;
             padding: 20px;
             background-color: white;
             border-radius: 10px;
@@ -60,9 +54,13 @@
         }
 
         #muscle-list {
-            list-style-type: none; /* Remove bullets (dots) */
-            /*padding: 0; /* Remove default padding */
-            /*margin: 0; /* Remove default margin */
+            width: 45%;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            color: black;
+            margin-bottom: 20px;
         }
 
         .container-header {
@@ -77,7 +75,6 @@
             color: black;
             cursor: pointer;
             margin-bottom: 5px;
-            font-size: 14px;
         }
 
         .selected-exercise {
@@ -105,7 +102,7 @@
 
         .return-button {
             position: fixed;
-            bottom: 10px;
+            top: 10px;
             left: 10px;
             padding: 10px;
             background-color: #333;
@@ -120,10 +117,6 @@
             background-color: #555;
         }
 
-        .search-button {
-            display: none; /* Hidden */
-        }
-
         /* Update the style for the search button */
         .search-button {
             padding: 5px 10px; /* Adjust padding for better appearance */
@@ -136,7 +129,6 @@
             margin-left: 10px; /* Adjust the margin for the desired distance from the right */
             border: none;
             display: inline-block; /* Make it an inline-block element */
-            visibility: hidden;
         }
 
         .search-button:hover {
@@ -169,7 +161,6 @@
     </div>
 
     <script>
-        // ... (your existing JavaScript code)
         const muscleData = {
             // ... (your existing muscle data)
             'Legs': [
@@ -394,7 +385,7 @@
                                     searchExercise(exercise);
                                 });
 
-                                //listItem.appendChild(searchButton);
+                                listItem.appendChild(searchButton);
                                 listItem.addEventListener('click', () => toggleStyle(listItem));
                                 selectedExerciseList.appendChild(listItem);
                             });
@@ -455,7 +446,6 @@
             window.location.href = searchUrl;
             //alert(`Searching for exercise: ${exercise}`);
         }
-
     </script>
 
 </body>

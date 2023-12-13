@@ -29,9 +29,12 @@ body {
 h1 {
     font-size: 1.2em;
     font-weight: bold;
+    margin-top: -70px;
+    margin-bottom: 100px;
 }
 
 .muscle-list {
+    
     list-style: none;
     padding: 0;
     margin: 0;
